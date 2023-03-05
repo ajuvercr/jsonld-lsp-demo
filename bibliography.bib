@@ -1,0 +1,109 @@
+@article{key_name,
+    author  = {Peter Adams},
+    title   = {The title of the work},
+    journal = {The name of the journal},
+    year    = {1993},
+    number  = {2},
+    pages   = {201-213},
+    month   = {7},
+    note    = {An optional note},
+    volume  = {4}
+}
+
+@online{Builder-Server,
+  author = {Scala Center, Jetbrains},
+  title = {{Builder Server Protocol}},
+  url = {https://github.com/build-server-protocol/build-server-protocol},
+  urldate = {2023-03-05}
+}
+
+@online{YASGUI,
+  title = {{YASGUI} - SPARQL editor},
+  url = {https://triply.cc/docs/yasgui/},
+  urldate = {2023-03-05}
+}
+
+@online{stardog,
+  title = {{Stardog} - language servers github},
+  url = {https://github.com/stardog-union/stardog-language-servers},
+  urldate = {2023-03-05}
+}
+
+@online{OSLO,
+  title = {{OSLO} - Open Standaarden voor Linkende Organisaties},
+  url = {https://www.vlaanderen.be/digitaal-vlaanderen/onze-oplossingen/oslo},
+  urldate = {2023-03-05}
+}
+
+@online{LSP,
+  title = {{LSP} - Language Server Protocol},
+  url = {https://microsoft.github.io/language-server-protocol/},
+  urldate = {2023-03-05}
+}
+@online{LOV,
+  title = {{LOV} - Linked Open Vocabularies},
+  url = {https://lov.linkeddata.es/dataset/lov/},
+  urldate = {2023-03-05}
+}
+
+@TechReport{JSON-LD-W3C,
+  author      = "Manu Sporny and Gregg Kellogg and Markus Lanthaler",
+  title       = {{JSON}-LD 1.1"},
+  month       = jul,
+  note        = "https://www.w3.org/TR/json-ld/",
+  year        = "2020",
+  bibsource   = "https://w2.syronex.com/jmr/w3c-biblio",
+  type        = "{W3C} Recommendation",
+  institution = "W3C",
+}
+
+@inproceedings{JSON-LD-modeling,
+author = {Lanthaler, Markus and G\"{u}tl, Christian},
+title = {Model Your Application Domain, Not Your JSON Structures},
+year = {2013},
+isbn = {9781450320382},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/2487788.2488184},
+doi = {10.1145/2487788.2488184},
+abstract = {Creating truly RESTful Web APIs is still more an art than a science. Developers have to struggle with a number of complex design decisions because concrete guidelines and processes are missing. Consequently, often it is decided to implement the simplest solution which is, most of the time, to rely on out-of-band contracts between the client and the server. Instead of properly modeling the application domain, all the effort is put in the design of proprietary JSON structures and URLs. This then forms the base for the contract which is communicated in natural-language (with all its ambiguity) to client developers. Since it is the server who owns the contract it may be changed at any point, which, more often than not, results in broken clients. In this position paper, we discuss some of the challenges and choices that need to be made when designing RESTful Web APIs. In particular, we compare how contracts are supposed to be established and how they are defined in practice. We illustrate the problems that are the cause of these divergences. As a first step to address these issues we describe and motivate an alternative, domain-driven approach to design Web APIs.},
+booktitle = {Proceedings of the 22nd International Conference on World Wide Web},
+pages = {1415–1420},
+numpages = {6},
+keywords = {web, hydra, json-ld, linked data, domain-driven design, contracts, http, web apis, web services, distributed systems, rest},
+location = {Rio de Janeiro, Brazil},
+series = {WWW '13 Companion}
+}
+
+@InProceedings{LSP-Multi,
+author="B{\"u}nder, Hendrik
+and Kuchen, Herbert",
+editor="Hammoudi, Slimane
+and Pires, Lu{\'i}s Ferreira
+and Seli{\'{c}}, Bran",
+title="Towards Multi-editor Support for Domain-Specific Languages Utilizing the Language Server Protocol",
+booktitle="Model-Driven Engineering and Software Development",
+year="2020",
+publisher="Springer International Publishing",
+address="Cham",
+pages="225--245",
+abstract="In model-driven software development (MDSD) projects, frequently domain experts and developers work together on the same model. However, they have quite different preferences concerning tools for working with a model. While developers require a powerful integrated development environment (IDE), domain experts are overwhelmed by the amount of functionality of an IDE and its confusing user interface. They prefer a simple editor, often provided as a web application, which does not require a local installation. Currently, both stakeholders typically agree on a common tool, which is frustrating for at least one of them. The Language Server Protocol (LSP) is a standard that aims to include language smarts into simple editors without turning them into IDEs. Originally, it has been designed for programming languages. In the present paper, we will give evidence based on a case study and a corresponding SWOT analysis that it is even more beneficial for a textual domain-specific language (DSL) as it is often used in MDSD. We will focus on the language workbench Xtext which supports the LSP. In particular, we will investigate how the LSP can be used to integrate a DSL into different development tools (editors and IDEs). Supplementing the SWOT analysis, we have also evaluated the practical relevance of the LSP.",
+isbn="978-3-030-37873-8"
+}
+@inproceedings{LSP-editor,
+author = {Barros, Djonathan and Peldszus, Sven and Assun\c{c}\~{a}o, Wesley K. G. and Berger, Thorsten},
+title = {Editing Support for Software Languages: Implementation Practices in Language Server Protocols},
+year = {2022},
+isbn = {9781450394666},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/3550355.3552452},
+doi = {10.1145/3550355.3552452},
+abstract = {Effectively using software languages, be it programming or domain-specific languages, requires effective editing support. Modern IDEs, modeling tools, and code editors typically provide sophisticated support to create, comprehend, or modify instances---programs or models---of particular languages. Unfortunately, building such editing support is challenging. While the engineering of languages is well understood and supported by modern model-driven techniques, there is a lack of engineering principles and best practices for realizing their editing support. Especially domain-specific languages---often created by smaller organizations or individual developers, sometimes even for single projects---would benefit from better methods and tools to create proper editing support.We study practices for implementing editing support in 30 so-called language servers---implementations of the language server protocol (LSP). The latter is a recent de facto standard to realize editing support for languages, separated from the editing tools (e.g., IDEs or modeling tools), enhancing the reusability and quality of the editing support. Witnessing the LSP's popularity---a whopping 121 language servers are in existence today---we take this opportunity to analyze the implementations of 30 language servers, some of which support multiple languages. We identify concerns that developers need to take into account when developing editing support, and we synthesize implementation practices to address them, based on a systematic analysis of the servers' source code. We hope that our results shed light on an important technology for software language engineering, that facilitates language-oriented programming and systems development, including model-driven engineering.},
+booktitle = {Proceedings of the 25th International Conference on Model Driven Engineering Languages and Systems},
+pages = {232–243},
+numpages = {12},
+keywords = {implementation practices, code assistance, source code editor, language engineering},
+location = {Montreal, Quebec, Canada},
+series = {MODELS '22}
+}
