@@ -1,0 +1,23 @@
+name: CI
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  find:
+    name: Setup repo
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: mkdir out
+      - run: echo '<a href="./jsonld-lsp-lncs.pdf">JSON-LD lsp (lncs)</a><br><a href="./jsonld-lsp-acm.pdf">JSON-LD lsp (acm)</a><br><a href="./jsonld-lsp-ieee.pdf">JSON-LD lsp (ieee)</a>' > ./out/index.html
+      - uses: ajuvercr/markdown-templates@v1
+        with:
+          paper: jsonld-lsp
+          location: ${{github.workspace}}/
+      - uses: peaceiris/actions-gh-pages@v3
+        with:
+          target_branch: gh-pages
+          publish_dir: ${{github.workspace}}/out
+          github_token: ${{ secrets.GITHUB_TOKEN }}
