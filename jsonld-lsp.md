@@ -4,7 +4,7 @@ date: \today
 author:
 - name: Arthur Vercruysse
   institute: Ghent University
-- name: Pieter Colpaert
+- name: John Doe
   institute: Ghent University
 institute: "Ghent University"
 bibliography: "bibliography.bib"
@@ -68,9 +68,13 @@ Overall, the Language Server Protocol has greatly simplified the process of inte
 
 # Demo
 
+Our demo presents an implementation of a JSON-LD Language Server Protocol (LSP), developed using the Rust programming language and based on a basic LSP implementation [@crate-tower-lsp]. Although the LSP does not yet support all of the protocol's capabilities, we believe that it is already making an impact. To extract predicate mappings from the context, we used a basic JSON-LD crate [@crate-jsonld]. The full source code and installation instructions can be found on GitHub [@crate-jsonld-lsp].
 
 
-## Future work
+One of the key features of our LSP is code completion based on the defined context. It extracts defined predicate mappings from the inlined context, local contexts, and contexts hosted on the web. However, it currently does not take into account special context attributes such as context overloading or scoped contexts [@JSON-LD-W3C]. Additionally, our LSP can suggest defined identifiers when '@' is written and supports renaming of identifiers within the document. All of these capabilities can be seen in Figure \ref{showcase}.
 
- 
+![Screenshot of JSON-LD LSP capabilities with NeoVim\label{showcase}](./fig/figure.png)
+
+The potential for extensions is vast. Firstly, we can correctly interpret all context features. Secondly, we can deduce the type and examine the used vocabulary to suggest the correct predicates and add autocompletion based on compacted predicates such as `foaf:knows`.
+
  
