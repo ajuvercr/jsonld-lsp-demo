@@ -22,24 +22,31 @@ abstract: |
 
 # Introduction
 
-JSON-LD is a data serialization format that is used to describe semi-structured data on the web [@JSON-LD-W3C]. The premise of JSON-LD is simple: _just_ write JSON and annotate the document with a context, and there is semantic data. _Just_ writing JSON becomes very tedious when the context grows and not all predicates are easy to remember. Then it starts to feel like programming: only use fields that are defined or your data is broken. A JSON-LD editor might mitigate these problems.
+JSON-LD is a data serialization format that is used to describe semi-structured data on the web [@JSON-LD-W3C].
+It adds semantic information to JSON, among others with the `@context` property, pointing to a JSON-LD context.
+This context specifies how to map properties to predicates, called aliases.
+The `@id` property then again specifies the subject of the current JSON object.
 
-JSON-LD is used more and more, thus introducing more and more complex contexts. Major players in this field are promoting open standards and application profiles by exposing JSON-LD contexts. For example, OSLO is a Flemish initiative that is working to achieve interoperability across Flanders by building semantic standards for different stakeholders such as government, industry and academia [@OSLO]. These efforts start by exposing complex JSON-LD contexts.
+JSON-LD allows you to write JSON and annotate the document with a context containing the necessary information for a JSON-LD processor to map it to RDF triples with IRIs.
+Writing this JSON becomes tedious when the context grows and not all properties are easy to remember.
+For example, just misspelling a JSON key can break your entire Linked Data use case.
 
+With its increasing popularity, contexts in JSON-LD also increase in complexity.
+For example, OSLO is an initiative in Flanders (Belgium) that is working to achieve interoperability by building semantic standards for different stakeholders such as government, industry and academia [@OSLO].
+Example JSON-LD context files for their vocabularies and application profiles [are available on the website data.vlaanderen.be](https://data.vlaanderen.be).
 
-A _real_ JSON-LD editor can help the developer experience as they are powerful tools that allow users to receive feedback as they work. One way editors can provide feedback is by implementing domain-specific logic directly, but another way is by using the Language Server Protocol (LSP). LSP is a standard interface that separates the domain-specific logic from the editor's logic [@LSP-Multi], allowing editors to offer advanced features such as code completion, hover information, and go-to-definition. By implementing an LSP for JSON-LD, developers can enjoy these advanced features and bring their editor's capabilities for JSON-LD up to par with programming languages.
+Just like we use an editor when using funtions and variables while programming, a semantic JSON-LD editor will be able to avoid common mistakes.
+In this demo, we show how a JSON-LD editor can help the developer experience.
+The Language Server Protocol (LSP) is a standard interface that separates the domain-specific logic from the editor's logic [@LSP-Multi], allowing editors to offer advanced features such as code completion, hover information, and go-to-definition.
+By implementing an LSP for JSON-LD, developers can enjoy these advanced features and bring their editor's capabilities for JSON-LD up to par with programming languages.
 
 <!-- What is the competition doing? JSON with JSON schema? Autocompletion with Yasgui? Turtle lsp (stardog) -->
 Similar efforts have been made before, but never for JSON-LD. For example, the Yasgui editor [@YASGUI], a popular SPARQL human query interface, provides autocompletion based on the LOV API [@LOV]. Plugins can add autocompletion based on domain knowledge. These capabilities are built into the editor and can only be used with Yasgui.
 Stardog created open-source LSPs for turtle, TRIG, SPARQL, and more, however, they only concern themselves with correct syntax and keyword auto-completion [@stardog]. 
 
-Our demo JSON-LD LSP can be found at [github.com/ajuvercr/jsonld-lsp](https://github.com/ajuvercr/jsonld-lsp) (MIT).
+Our demo JSON-LD LSP and installation instructions to use it with your favorite LSP capable editor can be found at [github.com/ajuvercr/jsonld-lsp](https://github.com/ajuvercr/jsonld-lsp) (MIT).
 
-## JSON-LD
-
-JSON-LD is an RDF format that uses the same syntax as JSON [@JSON-LD-W3C]. JSON-LD adds semantic information to JSON with the `@context` property, pointing to a JSON-LD context. This context specifies how to map properties to predicates, called aliases. The `@id` property specifies the subject of the current JSON object. Of course, JSON-LD and more notably the JSON-LD context are way more involved, but for this demo, this short overview suffices. 
-
-## Language Server Protocol  
+# Language Server Protocol
 
 The Language Server Protocol (LSP) is a JSON RPC protocol developed by Microsoft to simplify the process of integrating language-specific logic into an editor [@LSP]. Prior to LSP, editors had to implement each programming language they wanted to support individually, resulting in an $O(n*m)$ complexity where n is the number of editors and m is the number of programming languages. With LSP, editor and language-specific logic only needs to be implemented once, resulting in a much simpler $O(n+m)$ complexity [@LSP-Multi]. LSP only concerns itself with the source files of the program and doesn't involve building, running, or debugging. This is in contrast to the Build Server Protocol [@Builder-Server].
 
@@ -80,7 +87,8 @@ Additionally, our LSP supports renaming subjects. This is shown in Figure \ref{f
 <!--
 This demo only shows a small part of the full potential of a JSON-LD LSP. If the LSP would interpret the context fully, it can give better suggestions based on context overloading and scoped contexts. The LSP can also be extended to interpret referred vocabularies to suggest compacted predicate notation, like `foaf:knows`. Yet, in its current form, the LSP can already help creating and editing JSON-LD documents, thus improving the developer experience.
 -->
- 
+
+# Conclusion
  
 This demonstration merely scratches the surface of the vast capabilities of a JSON-LD LSP. By leveraging fully-interpreted contexts, the LSP can provide more contextually-relevant suggestions, taking into account context overloading and scoped contexts. Additionally, the LSP's functionality can be expanded to include the interpretation of referenced vocabularies, allowing completion for compacted predicates, like `foaf:knows`. Despite its current limitations, the LSP already enhances the developer experience by facilitating the creation and editing of JSON-LD documents.
 
