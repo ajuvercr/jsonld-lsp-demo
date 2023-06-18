@@ -8,6 +8,17 @@
 % hf,
 ]{ceurart}
 
+
+%%
+%% Reviewing packages and definitions
+\usepackage[dvipsnames,svgnames]{xcolor} % text color
+\usepackage[normalem]{ulem} % wavy underlines
+\newcommand{\todo}[1]{\noindent\textcolor{red}{{\bf \{TODO}: #1{\bf \}}}}
+\newcommand{\TODO}[1]{\todo{#1}}
+\newcommand{\citeneeded}{\textcolor{red}{{\bf [?!]}}}
+\newenvironment{draft}{\color{gray}}{\color{black}}
+\newcommand\jr[1]{{\color{Red}\textbf{JR}: #1}}
+
 %%
 %% One can fix some overfulls
 \sloppy
@@ -51,7 +62,7 @@
 orcid=0000-0002-0877-7063,
 email=arthur.vercruysse@ugent.be,
 ]
-\author[1]{Julian Rojas}[%
+\author[1]{Julián Andrés Rojas}[%
 orcid=0000-0002-0877-7063,
 email=JulianAndres.RojasMelendez@UGent.be,
 ]
@@ -74,12 +85,11 @@ email=pieter.colpaert@ugent.be,
 %% article.
 \begin{abstract}
   JSON-LD is a popular data format used to describe and share semantic data on the web.
-  However, creating and editing JSON-LD documents can be a challenging task, especially when dealing with complex contexts and many properties.
+  However, creating and editing JSON-LD documents can be a challenging task, especially when dealing with complex (sometimes remote) contexts that include many properties.
   The existing JSON editing functionality may not suffice for developers, and a JSON-LD editor could greatly enhance their experience.
   In this paper, we introduce a JSON-LD Language Server Protocol (LSP) that enables text editors compatible with the LSP protocol (e.g., Visual Studio Code and NeoVim), to suggest autocompletion items based on the defined context, and it also enables renaming identifiers inside the document.
-  We believe that the implementation of our LSP will enhance developer ergonomics and promote the adoption of JSON-LD.
-  Moreover, we see high potential for additional features that can be added to the JSON-LD LSP.
-  For example, hovering, go-to-definition and code actions like flattening or structuring of JSON-LD documents, are possible features for future enhancements.
+  We believe that the implementation of a JSON-LD LSP will enhance developer ergonomics and promote its adoption.
+  Moreover, we see high potential for additional features that can be added such as hovering, go-to-definition and code actions like flattening or structuring of JSON-LD documents.
 \end{abstract}
 
 %%
@@ -103,18 +113,19 @@ It adds semantic information to JSON, among others with the \textit{@context} pr
 This context specifies how to map properties to predicates, called aliases.
 
 With its increasing popularity, contexts in JSON-LD also increase in complexity.
-For example, OSLO is an initiative in Flanders (Belgium) that is working to achieve interoperability by building semantic standards for different stakeholders such as government, industry and academia \footnote{\href{https://www.vlaanderen.be/digitaal-vlaanderen/onze-oplossingen/oslo}{OSLO} - Open Standaarden voor Linkende Organisaties}.
-Example JSON-LD context files for their vocabularies and application profiles \href{https://data.vlaanderen.be}{are available on the website data.vlaanderen.be}.
+For example, the Flemish (Belgium) OSLO initiative is working to achieve interoperability by building semantic standards for different stakeholders such as government, industry and academia \footnote{\href{https://www.vlaanderen.be/digitaal-vlaanderen/onze-oplossingen/oslo}{OSLO} - Open Standaarden voor Linkende Organisaties}.
+They use JSON-LD context files for their vocabularies and application profiles. Examples \href{https://data.vlaanderen.be}{are available on the website data.vlaanderen.be}.
+\jr{Let's mention and \href{https://www.semantic-web-journal.net/content/componentsjs-semantic-dependency-injection-0}{cite} here ComponentsJs as another example where JSON-LD is used. It is mentioned below but not everybody knows it.}
 
-Complex JSON-LD contexts make JSON-LD complexer than it should be. 
-When you use an alias to describe a property and accidentally make a typo, the resulting linked data is broken and there is no real way to check or fix the issue.
-This makes prototyping and configuring software with ComponentsJs slow and error-prone.
-In the next section, we show that using a language server for JSON-LD alliviates this problem and can also bring quality of life improvements to the developer.
+Complex JSON-LD contexts may difficult defining new JSON-LD documents or semantically annotating existing ones. 
+When using aliases to describe properties, accidental typos may result in broken linked data and to the best of our knowledge, there are no tools in existence that could assist on preventing this issue.
+This makes, for example, that prototyping and configuring software with ComponentsJs results in a slow and error-prone process.
+We show that using a language server for JSON-LD helps alleviating this problem and can also bring better developer ergonomics for experienced and new semantic web developers.
 
 Similar efforts have been made before, but never for JSON-LD. For example, the Yasgui editor\footnote{\href{https://triply.cc/docs/yasgui/}{Yasgui} - SPARQL editor}, a popular SPARQL human query interface, provides autocompletion based on the LOV API \cite{LOV}. Plugins can add autocompletion based on domain knowledge. These capabilities are built into the editor and can only be used with Yasgui.
-Stardog created open-source LSPs for turtle, TRIG, SPARQL, and more, however, they only concern themselves with correct syntax and keyword auto-completion \cite{stardog}. 
+Stardog created open-source LSPs for turtle, TRIG, SPARQL, and more, however, they focus only on correct syntax and keyword auto-completion \cite{stardog}. 
 
-Our demo JSON-LD LSP and installation instructions to use it with your favorite LSP capable editor can be found at \href{github.com/ajuvercr/jsonld-lsp](https://github.com/ajuvercr/jsonld-lsp}{github.com/ajuvercr/jsonld-lsp} (MIT).
+We make our demo JSON-LD LSP and installation instructions to be used with LSP capable editors available at \href{github.com/ajuvercr/jsonld-lsp](https://github.com/ajuvercr/jsonld-lsp}{github.com/ajuvercr/jsonld-lsp} (MIT).
 
 
 \section{Language Server Protocol}
@@ -125,30 +136,30 @@ With LSP, editor and language-specific logic only needs to be implemented once, 
 LSP only concerns itself with the source files of the program and doesn't involve building, running, or debugging.
 This is in contrast to the Build Server Protocol \footnote{\href{https://github.com/build-server-protocol/build-server-protocol}{BSP} - Builder Server Protocol}.
 
-Next we discuss the main features a LSP provides to an editor and show that these features are useful in the context of JSON-LD.
+Next we discuss the main features a LSP provides to an editor and discuss how these features may be useful in the context of JSON-LD.
 
 \begin{itemize}
   \item \textbf{Autocompletion} enables the developer to type less and thus make less mistakes. It also shows the developer more options so not all aliases have to be known by heart.
   \item \textbf{Diagnostics} represent errors in the file, this goes from syntax errors to warnings that inform the developer that for example a property is not defined in the current context.
-  \item \textbf{Semantic Highlighting} differs from syntax highlighting. The syntax of JSON is very easy, but semantic highlighting shows used keywords and variable identifiers etc.
-  \item \textbf{Code actions} are general actions, for JSON-LD this can be flattening the structure. Standard actions like renaming and formatting is also supported.
+  \item \textbf{Semantic Highlighting} differs from syntax highlighting. The syntax of JSON is very easy, but semantic highlighting shows used keywords and variable identifiers etc. \jr{Maybe an example here?}
+  \item \textbf{Code actions} are general actions. For JSON-LD these can be e.g., flattening, compacting or expanding the structure. General actions like renaming and formatting could also supported.
   \item \textbf{Hover} can show additional information about properties. By using the power of linked data, the IDE can dereference the property and look for some description of the used property.
 \end{itemize}
 
-The protocol allows for partial implementations, in the next section we show a demo that implements not all features and we believe it is still of great help for JSON-LD developers.
+The protocol allows for partial implementations, in the next section we show a demo that implements some of these features and yet, already shows to significantly improve JSON-LD editing experience.
 
 \section{Demo}
 
 Our demo presents an implementation of a JSON-LD Language Server Protocol (LSP), developed using the Rust programming language and based on a basic LSP implementation \footnote{\href{https://crates.io/crates/tower-lsp}{Tower LSP} - Crate by Eyal Kalderon}.
 To extract predicate mappings from the context, we rely on the JSON-LD crate \footnote{\href{https://crates.io/crates/json-ld}{JSON-LD} - Crate by Timothée Haudebourg}.
 The full source code and installation instructions can be found on GitHub (MIT)\footnote{\href{https://github.com/ajuvercr/jsonld-lsp}{JSON-LD LSP} - Crate by Arthur Vercruysse}.
-This demo is available on the web, as a vscode extension and as a NeoVim LSP, you can find all information and try it out on the website. 
+This demo is available on the web via a live text editor, as a vscode extension and as a NeoVim LSP. Documentation is also available on the website. 
 
-The demo implementation supports autocompletion, diagnostics and semantic highlighting and rename, Each with their own caviates. 
-Autocompletion only supports easy aliases extracted from the context. 
+The demo implementation supports autocompletion, diagnostics and semantic highlighting and renaming (each with their own caveats). 
+Autocompletion only supports simple and explicit aliases extracted from the context. 
 It should be possible to write \textit{foaf:} and get autocompletion for all defined predicates in the \textit{foaf} namespace, but this is not yet supported.
-Diagnostics only gives syntax diagnostics, which is helpful the demo does not warm developers if an undefined predicate is used.
-Semantic highlighting works, it shows keywords and identifiers in different colors.
+Diagnostics only gives syntax diagnostics, however the demo does not warm developers if an undefined predicate is used.
+Semantic highlighting works as expected and shows keywords and identifiers in different colors.
 
 
 \begin{figure}
@@ -162,7 +173,7 @@ Semantic highlighting works, it shows keywords and identifiers in different colo
 \end{figure}
 
 
-One of the key features of our LSP is code autocompletion based on the defined context. It extracts aliases from the inlined context, local contexts, and contexts hosted on the web. However, it currently does not take into account special context attributes such as context overloading or scoped contexts \cite{JSON-LD-W3C}. In Figure \ref{fig:complete}, you can see this in action. The context defines two aliases, "name" and "knows". When the completion event is triggered, the user can choose between these aliases and the editor will complete the chosen alias. Defined subjects can be completed when writing \textit{@}, but will expand to more involved objects.
+One of the key features of our LSP is code autocompletion based on the defined context. It extracts aliases from the inlined context, local contexts, and contexts hosted on the web. However, it currently does not take into account special context attributes such as context overloading or scoped contexts \cite{JSON-LD-W3C}. Figure \ref{fig:complete}, shoes this in action. The context defines two aliases, "name" and "knows". When the completion event is triggered, the user can choose between these aliases and the editor will complete the chosen alias. Defined subjects can be completed when writing \textit{@}, but will expand to more involved objects.
 
 \begin{figure}
 \centering
@@ -265,6 +276,7 @@ This demonstration merely scratches the surface of the vast capabilities of a JS
 
 %%
 %% Define the bibliography file to be used
+\jr{There is an issue in reference [3]}
 \bibliography{bibliography}
 
 
