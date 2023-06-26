@@ -59,27 +59,17 @@
 %%
 %% The "author" command and its associated commands are used to define
 %% the authors and their affiliations.
-\author[1]{Arthur Vercruysse}[%
-orcid=0000-0002-0877-7063,
-email=arthur.vercruysse@ugent.be,
+\author[1]{Author 1}[%
+orcid=0000-0000-0000-0000,
 ]
-\author[1]{Julián Andrés Rojas}[%
-orcid=0000-0002-0877-7063,
-email=JulianAndres.RojasMelendez@UGent.be,
+\author[1]{Author 2}[%
+orcid=0000-0000-0000-0000,
 ]
-\author[1]{Pieter Colpaert}[%
-orcid=0000-0001-7116-9338,
-email=pieter.colpaert@ugent.be,
+\author[1]{Author 3}[%
+orcid=0000-0000-0000-0000,
 ]
-\cormark[1]
-\fnmark[1]
-\address[1]{IDLab, Department of Electronics and Information Systems, Ghent University – imec}
-% \address[2]{IDLab, Department of Electronics and Information Systems, Ghent University – imec}
-% \address[3]{IDLab, Department of Electronics and Information Systems, Ghent University – imec}
+\address[1]{Some place on the world}
 
-%% Footnotes
-\cortext[1]{Corresponding author.}
-\fntext[1]{These authors contributed equally.}
 
 %%
 %% The abstract is a short summary of the work to be presented in the
@@ -126,7 +116,7 @@ We show that using a language server for JSON-LD helps alleviating this problem 
 Similar efforts have been made before, but never for JSON-LD. For example, the Yasgui editor\footnote{\href{https://triply.cc/docs/yasgui/}{Yasgui} - SPARQL editor}, a popular SPARQL human query interface, provides autocompletion based on the LOV API \cite{LOV}. Plugins can add autocompletion based on domain knowledge. These capabilities are built into the editor and can only be used with Yasgui.
 Stardog created open-source LSPs for turtle, TRIG, SPARQL, and more, however, they focus only on correct syntax and keyword auto-completion \cite{stardog}. 
 
-We make our demo JSON-LD LSP and installation instructions to be used with LSP capable editors available at \href{github.com/ajuvercr/jsonld-lsp](https://github.com/ajuvercr/jsonld-lsp}{github.com/ajuvercr/jsonld-lsp} (MIT).
+We make our demo JSON-LD LSP and installation instructions to be used with LSP capable editors available at github (MIT).
 
 
 \section{Language Server Protocol}
@@ -153,7 +143,7 @@ The protocol allows for partial implementations, in the next section we show a d
 
 Our demo presents an implementation of a JSON-LD Language Server Protocol (LSP), developed using the Rust programming language and based on a basic LSP implementation \footnote{\href{https://crates.io/crates/tower-lsp}{Tower LSP} - Crate by Eyal Kalderon}.
 To extract predicate mappings from the context, we rely on the JSON-LD crate \footnote{\href{https://crates.io/crates/json-ld}{JSON-LD} - Crate by Timothée Haudebourg}.
-The full source code and installation instructions can be found on GitHub (MIT)\footnote{\href{https://github.com/ajuvercr/jsonld-lsp}{JSON-LD LSP} - Crate by Arthur Vercruysse}.
+The full source code and installation instructions can be found on GitHub (MIT).
 This demo is available on the web via a live text editor, as a vscode extension and as a NeoVim LSP. Documentation is also available on the website. 
 
 The demo implementation supports autocompletion, diagnostics and semantic highlighting and renaming (each with their own caveats). 
