@@ -90,6 +90,3 @@ Additionally, our LSP implementation supports renaming subjects. This is shown i
 # Conclusion
  
 This demonstration merely scratches the surface of the vast capabilities of a JSON-LD LSP. By leveraging fully-interpreted contexts, the LSP can provide more contextually-relevant suggestions, taking into account context overloading and scoped contexts. Additionally, the LSP's functionality can be expanded to include the interpretation of referenced vocabularies, allowing completion for compacted predicates, like `foaf:knows`. Despite its current limitations, the LSP already enhances the developer experience by facilitating the creation and editing of JSON-LD documents.
-
-
-
