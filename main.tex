@@ -89,6 +89,8 @@ orcid=0000-0000-0000-0000,
 \begin{keywords}
   Linked Data \sep 
   JSON-LD \sep
+  Developer UX \sep
+  Tool \sep
   Language Server
 \end{keywords}
 
@@ -99,16 +101,16 @@ orcid=0000-0000-0000-0000,
 
 \section{Introduction}
 
-JSON-LD is a data serialization format that is used to describe semi-structured data on the web \cite{JSON-LD-W3C}.
+JSON-LD is a data serialization format that is used to describe semi-structured data on the web\cite{JSON-LD-W3C}.
 It adds semantic information to JSON, among others with the \textit{@context} property, pointing to a JSON-LD context.
 This context specifies how to map properties to predicates, called aliases.
 
 With its increasing popularity, contexts in JSON-LD also increase in complexity.
-For example, the Flemish (Belgium) OSLO initiative is working to achieve interoperability by building semantic standards for different stakeholders such as government, industry and academia \footnote{\href{https://www.vlaanderen.be/digitaal-vlaanderen/onze-oplossingen/oslo}{OSLO} - Open Standaarden voor Linkende Organisaties}.
+For example, the Flemish (Belgium) OSLO initiative is working to achieve interoperability by building semantic standards for different stakeholders such as government, industry and academia\footnote{\href{https://www.vlaanderen.be/digitaal-vlaanderen/onze-oplossingen/oslo}{OSLO} - Open Standaarden voor Linkende Organisaties}.
 They focus on standardizing JSON-LD context files for their vocabularies and application profiles. 
 An example is \href{https://data.vlaanderen.be/doc/applicatieprofiel/vlaamse-codex/}{the Flemish codex application profile}, the context defined for this profile enables the usage of Dutch JSON objects to be Linked Data.
 
-Another example where JSON-LD contexts are extensively used is the semantic dependency injection framework ComponentsJs \cite{CJS}. 
+Another example where JSON-LD contexts are extensively used is the semantic dependency injection framework ComponentsJs\cite{CJS}. 
 ComponentsJs allows Javascript packages to define JSON-LD contexts that describe the package, these contexts are then used to configure an instance of a program.
 
 Creating new JSON-LD documents is a difficult task, to know the defined aliases the developer has to scrupulously explore the context and remember the defined names, 
@@ -116,19 +118,19 @@ accidental typos can result in broken linked data and to the best of our knowled
 We show that using a language server for JSON-LD helps alleviate this problem and can also bring better developer ergonomics for experienced and new semantic web developers.
 
 Similar efforts have been made before, but never for JSON-LD. 
-For example, the Yasgui editor\footnote{\href{https://triply.cc/docs/yasgui/}{Yasgui} - SPARQL editor}, a popular SPARQL human query interface, provides autocompletion based on the LOV API \cite{LOV}. 
+For example, the Yasgui editor\footnote{\href{https://triply.cc/docs/yasgui/}{Yasgui} - SPARQL editor}, a popular SPARQL human query interface, provides autocompletion based on the LOV API\cite{LOV}. 
 Plugins can add autocompletion based on domain knowledge. 
 These capabilities are built into the deployed editor and can only be used with Yasgui.
-Stardog created open-source LSPs for turtle, TRIG, SPARQL, and more, however, they focus only on correct syntax and keyword auto-completion \cite{stardog}. 
+Stardog created open-source LSPs for turtle, TRIG, SPARQL, and more, however, they focus only on correct syntax and keyword auto-completion\cite{stardog}. 
 
-We make our demo JSON-LD LSP and installation instructions to be used with LSP capable editors available at Github (MIT).
+All source code and installation instructions are available on GitHub (MIT).
 
 
 \section{Language Server Protocol}
 
-The Language Server Protocol (LSP) is a JSON RPC protocol developed by Microsoft to simplify the process of integrating language-specific logic into an editor \footnote{\href{https://microsoft.github.io/language-server-protocol/}{LSP} - Language Server Protocol}. 
+The Language Server Protocol (LSP) is a JSON RPC protocol developed by Microsoft to simplify the process of integrating language-specific logic into an editor\footnote{\href{https://microsoft.github.io/language-server-protocol/}{LSP} - Language Server Protocol}. 
 Before LSP, editors had to implement each programming language they wanted to support individually, resulting in an \(O(n*m)\) complexity, where n is the number of editors and m is the number of programming languages.
-With LSP, editor and language-specific logic only need to be implemented once, resulting in a much simpler \(O(n+m)\) complexity \cite{LSP-Multi}.
+With LSP, editor and language-specific logic only need to be implemented once, resulting in a much simpler \(O(n+m)\) complexity\cite{LSP-Multi}.
 % LSP only concerns itself with the source files of the program and doesn't involve building, running, or debugging.
 % This is in contrast to the Build Server Protocol \footnote{\href{https://github.com/build-server-protocol/build-server-protocol}{BSP} - Builder Server Protocol}.
 
@@ -137,27 +139,46 @@ Next, we discuss the main features a LSP implementation provides to an editor an
 \begin{itemize}
   \item \textbf{Autocompletion} enables the developer to type less and thus make fewer mistakes. It also shows the developer more options so not all aliases have to be known by heart.
   \item \textbf{Diagnostics} represent errors in the file, this goes from syntax errors to warnings that inform the developer that a property is not defined in the current context.
-  \item \textbf{Semantic Highlighting} differs from syntax highlighting. The syntax of JSON is very easy, but semantic highlighting shows used keywords and variable identifiers etc. \jr{Maybe an example here?}
+  \item \textbf{Semantic Highlighting} differs from syntax highlighting. The syntax of JSON is very easy, but semantic highlighting shows used keywords and variable identifiers etc. See Figure \ref{fig:semantic} for an example.
   \item \textbf{Code actions} are general actions. For JSON-LD these can be e.g., flattening, compacting or expanding the structure. General actions like renaming and formatting are also supported.
   \item \textbf{Hover} can show additional information about properties. By using the power of linked data, the IDE can dereference the property and look for some description of the used property.
 \end{itemize}
 
-The protocol allows for partial implementations, in the next section we show a demo that implements some of these features and already shows a significantly improved JSON-LD editing experience.
+\begin{figure}
+\centering
+\makebox[\textwidth][c]{
+    \includegraphics[width=0.6\linewidth]{./fig/semantic.png}
+}
+\caption{Example of potentially using semantic highlighting on JSON-LD documents. Note the different colors used for defined and undefined predicates, keywords, numbers and identifiers.}
+\label{fig:semantic}
+\end{figure}
+
+% The protocol allows for partial implementations, in the next section we show a demo that implements some of these features and already shows a significantly improved JSON-LD editing experience.
 
 
 \section{Demo}
 
-Our demo presents an implementation of a JSON-LD Language Server Protocol (LSP), developed using the Rust programming language and based on a basic LSP implementation \footnote{\href{https://crates.io/crates/tower-lsp}{Tower LSP} - Crate by Eyal Kalderon}.
+Our demo presents an implementation of a JSON-LD Language Server Protocol (LSP), developed using the Rust programming language based on a basic LSP implementation \footnote{\href{https://crates.io/crates/tower-lsp}{Tower LSP} - Crate by Eyal Kalderon}.
 To extract predicate mappings from the context, we rely on the JSON-LD crate \footnote{\href{https://crates.io/crates/json-ld}{JSON-LD} - Crate by Timothée Haudebourg}.
 The full source code and installation instructions can be found on GitHub (MIT).
-This LSP is available on the web, as a vscode extension and as a NeoVim LSP. Documentation is also available on the website. 
+This LSP is available in a \href{https://jsonld.tiiny.site/}{web editor}
+%\footnote{Slimmed down version of the site for reviewing}, as a VS Code extension and as a NeoVim LSP.
 
-The demo implementation supports autocompletion, diagnostics and semantic highlighting and renaming (each with their own caveats). 
-Autocompletion only supports simple and explicit aliases extracted from the context. 
-It should be possible to write \textit{foaf:} and get autocompletion for all defined predicates in the \textit{foaf} namespace, but this is not yet supported.
-Diagnostics only gives syntax diagnostics, however the demo does not warm developers if an undefined predicate is used.
+The demo implementation supports autocompletion, diagnostics and semantic highlighting and renaming (each with their caveats). 
+
+Autocompletion only supports simple and explicit aliases extracted from the context, context overloading or scoped contexts are not supported. 
+Figure \ref{fig:complete}, shows autocompletion in action.
+The context defines two aliases, "name" and "knows". 
+When the completion event is triggered, the user can choose between these aliases and the editor will complete the chosen alias.
+Autocompletion based on defined identifiers is also suggested when writing \textit{@} but will expand to more involved objects.
+It should be possible to write \textit{foaf:} and get autocompletion suggestions for all defined predicates in the \textit{foaf} namespace, but this is not yet supported.
+
+Diagnostics only gives syntax diagnostics, the demo does not warm developers if an undefined predicate is used.
 Semantic highlighting works as expected and shows keywords and identifiers in different colors.
 
+Additionally, our LSP implementation supports renaming subjects.
+This is shown in Figure \ref{fig:rename}. 
+The user is asked for the new name and the LSP server will respond with the required text changes that change all matching subjects to the new name.
 
 \begin{figure}
 \centering
@@ -165,12 +186,10 @@ Semantic highlighting works as expected and shows keywords and identifiers in di
     \includegraphics[width=.5\linewidth]{./fig/completion.png}
     \includegraphics[width=.5\linewidth]{./fig/completion-id.png}
 }
-\caption{Screenshots showing completion functionality in NeoVim: left a list with all completion options, right a list containing the defined subject.}
+\caption{Screenshots showing completion functionality in NeoVim: the left side shows completion suggestions, and the right side also shows defined identifiers.}
 \label{fig:complete}
 \end{figure}
 
-
-One of the key features of our LSP is code autocompletion based on the defined context. It extracts aliases from the inlined context, local contexts, and contexts hosted on the web. However, it currently does not take into account special context attributes such as context overloading or scoped contexts \cite{JSON-LD-W3C}. Figure \ref{fig:complete}, shoes this in action. The context defines two aliases, "name" and "knows". When the completion event is triggered, the user can choose between these aliases and the editor will complete the chosen alias. Defined subjects can be completed when writing \textit{@}, but will expand to more involved objects.
 
 \begin{figure}
 \centering
@@ -182,7 +201,6 @@ One of the key features of our LSP is code autocompletion based on the defined c
 \label{fig:rename}
 \end{figure}
 
-Additionally, our LSP implementation supports renaming subjects. This is shown in Figure \ref{fig:rename}. The user is asked for the new name and the LSP server will respond with the required text changes that change all matching subjects to the new name.
 
 
 
@@ -193,10 +211,11 @@ By leveraging fully-interpreted contexts, the LSP can provide more contextually-
 Additionally, the LSP's functionality can be expanded to include the interpretation of referenced vocabularies, allowing completion for compacted predicates, like \textit{foaf:knows}.
 Despite its current limitations, the LSP already enhances the developer experience by facilitating the creation and editing of JSON-LD documents.
 
+This JSON-LD LSP is an example of what impact developer tools can have on productivity and therefore also on adoption.
+The same ideas can be applied to other semantic data formats to help write but also, with hover functionality, to help understand the data. 
 
 %%
 %% Define the bibliography file to be used
-\jr{There is an issue in reference [3]}
 \bibliography{bibliography}
 
 
