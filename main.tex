@@ -58,17 +58,27 @@
 %%
 %% The "author" command and its associated commands are used to define
 %% the authors and their affiliations.
-\author[1]{Author 1}[%
-orcid=0000-0000-0000-0000,
+\author[1]{Arthur Vercruysse}[%
+orcid=0000-0002-0877-7063,
+email=arthur.vercruysse@ugent.be,
 ]
-\author[1]{Author 2}[%
-orcid=0000-0000-0000-0000,
+\author[1]{Julián Andrés Rojas}[%
+orcid=0000-0002-0877-7063,
+email=JulianAndres.RojasMelendez@UGent.be,
 ]
-\author[1]{Author 3}[%
-orcid=0000-0000-0000-0000,
+\author[1]{Pieter Colpaert}[%
+orcid=0000-0001-7116-9338,
+email=pieter.colpaert@ugent.be,
 ]
-\address[1]{Some place on the world}
+\cormark[1]
+\fnmark[1]
+\address[1]{IDLab, Department of Electronics and Information Systems, Ghent University – imec}
+% \address[2]{IDLab, Department of Electronics and Information Systems, Ghent University – imec}
+% \address[3]{IDLab, Department of Electronics and Information Systems, Ghent University – imec}
 
+%% Footnotes
+\cortext[1]{Corresponding author.}
+\fntext[1]{These authors contributed equally.}
 
 %%
 %% The abstract is a short summary of the work to be presented in the
@@ -122,13 +132,13 @@ Plugins can also add autocompletion based on domain knowledge.
 These capabilities are built into the deployed editor and can only be used with Yasgui.
 Stardog created open-source LSPs for turtle, TRIG, SPARQL, and more, however, they focus only on correct syntax and keyword auto-completion\cite{stardog}. 
 
-In this paper, we introduce a JSON-LD language server implementation following the Language Server Protocol (LSP), a JSON RPC protocol designed by Microsoft\footnote{\href{https://microsoft.github.io/language-server-protocol/}{LSP}}.
+In this paper, we introduce a JSON-LD language server implementation following the Language Server Protocol (LSP), a JSON RPC protocol designed by Microsoft\footnote{Microsoft: \href{https://microsoft.github.io/language-server-protocol/}{Language Server Protocol}}.
 LSP is designed to simplify the process of integrating language-specific logic into an editor, removing the need to implement language-specific logic into each editor, and reducing the \(O(n*m)\) complexity to a much more manageable \(O(n+m)\) complexity\cite{LSP-Multi}.
 
 A full LSP implementation supplies the editor with IDE features, including autocompletion, diagnostics, formatting, identifier renaming, hovering, go-to-definition and generic code actions like \textit{extract highlighted code to function}. 
 Not all features have to be implemented, the Language Server and the editor communicate their capabilities and only use what is supported by both parties.
 
-All source code of the demo and installation instructions are available on GitHub (MIT).
+LSP source code and installation instructions are available on GitHub (MIT)\footnote{Github: \href{github.com/ajuvercr/jsonld-lsp}{https://github.com/ajuvercr/jsonld-lsp}}.
 
 
 \section{Features of the JSON-LD language server}
@@ -139,7 +149,7 @@ All source code of the demo and installation instructions are available on GitHu
 % LSP only concerns itself with the source files of the program and doesn't involve building, running, or debugging.
 % This is in contrast to the Build Server Protocol \footnote{\href{https://github.com/build-server-protocol/build-server-protocol}{BSP} - Builder Server Protocol}.
 
-This section covers what features are implemented, how and what benefit they provide the developer.
+This section covers the implemented features, explaining what they are and how they benefit the developer.
 
 \begin{itemize}
   \item \textbf{Autocompletion} enables the developer to type less and thus make fewer mistakes.
@@ -183,12 +193,12 @@ This section covers what features are implemented, how and what benefit they pro
 \section{Demo}
 
 Our demo presents an implementation of a JSON-LD Language Server according to the Langauge Server Protocol (LSP), developed using the Rust programming language based on a basic LSP implementation\footnote{\href{https://crates.io/crates/tower-lsp}{Tower LSP} - Crate by Eyal Kalderon}.
-The full source code and installation instructions can be found on GitHub (MIT).
-A demo version of the LSP is available on the \href{https://jsonld.tiiny.site/}{web}\footnote{Slimmed down and anonymized version for reviewing purposes}.
-The full LSP is available as a VS Code extension and as a NeoVim LSP.
+The full source code and installation instructions can be found on \href{https://github.com/ajuvercr/jsonld-lsp}{GitHub (MIT)}.
+A demo version of the LSP is available on the \href{https://ajuvercr.github.io/jsonld-lsp/}{web}.
+The full LSP is available as a \href{https://marketplace.visualstudio.com/items?itemName=ajuvercr.jsonld-lsp}{VS Code extension} and as a NeoVim LSP.
 
 The Language server is compiled to WASM to be integrated inside the VSCode extension.
-This enables the extension to be a Web Extension\footnote{https://code.visualstudio.com/api/extension-guides/web-extensions} is available in online Visual Studio Code instances like \textit{github.dev}.
+This enables the extension to be a Web Extension\footnote{https://code.visualstudio.com/api/extension-guides/web-extensions}, which are available in online Visual Studio Code instances like \textit{github.dev}.
 
 Extracting predicate mappings from the context is handled by the JSON-LD crate\footnote{\href{https://crates.io/crates/json-ld}{JSON-LD} - Crate by Timothée Haudebourg}.
 Some parts of the JSON-LD crate can't compile to WASM, because of internal Rust requirements\footnote{Fetching a resource in WASM is not \textit{Send} or \textit{Sync}, which is required in \textit{async} environments} and required some rewriting of the crate. 
